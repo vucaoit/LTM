@@ -20,11 +20,11 @@ public class Bai4Server {
                 .post();
             Elements elements = doc.getElementsByClass("copy");
             temp+="cmnd số "+ cmnd+ " . ";
-                temp+="họ tên : "+elements.get(0).toString().replaceAll("<span class=\"copy\">","").replaceAll("</span>","")+". ";
-            temp+="mã số thuế : "+elements.get(1).toString().replaceAll("<span class=\"copy\">","").replaceAll("</span>","")+". ";
-            temp+="Địa chỉ : "+elements.get(2).toString().replaceAll("<span class=\"copy\">","").replaceAll("</span>","")+". ";
-            temp+="Ngày hoạt động : "+elements.get(3).toString().replaceAll("<span class=\"copy\">","").replaceAll("</span>","")+". ";
-            temp+="Quản lý bởi : "+elements.get(4).toString().replaceAll("<span class=\"copy\">","").replaceAll("</span>","")+".";
+                temp+="họ tên : "+elements.get(0).text()+". ";
+            temp+="mã số thuế : "+elements.get(1).text()+". ";
+            temp+="Địa chỉ : "+elements.get(2).text()+". ";
+            temp+="Ngày hoạt động : "+elements.get(3).text()+". ";
+            temp+="Quản lý bởi : "+elements.get(4).text()+".";
             //System.out.println(temp);
         } catch (IOException e) {
             e.printStackTrace();

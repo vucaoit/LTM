@@ -12,6 +12,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -19,20 +20,38 @@ import java.util.concurrent.TimeUnit;
 public class Bai3Server {
     public static double TinhPi(double n){
         int i;
-        double INTERVAL = n;
-        double origin_dist, pi=0;
-        double circle_points = 0, square_points = 0;
-        // Total Random numbers generated = possible x
-        // values * possible y values
-        for (i = 0; i < 10; i++) {
-            CountPointThread countPointThread = new CountPointThread(n/10);
-            countPointThread.run(circle_points,square_points);
+        double pi=0;
+        int numberThread=12;
+        double circle_points=0; double square_points=0;
+        double rand_x, rand_y;
+        for ( i = 0; i < (n); i++) {
+            rand_x = new Random().nextDouble();
+            rand_y = new Random().nextDouble();
+            if (rand_x * rand_x + rand_y * rand_y <= 1) {
+                circle_points++;
+            }
+            square_points++;
         }
         pi = (4.0 * circle_points) / square_points*1.0;
-        // Final Estimated Value
+//
+//        //dung thread
+//        for (i = 0; i < numberThread; i++) {
+//            CountPointThread countPointThread = new CountPointThread(n/numberThread);
+//            countPointThread.start();
+//        }
+//        double sum_cirle=0;
+//        double sum_square=0;
+//        for(double x : EXAMPLE.circle){
+//            sum_cirle+=x;
+//        }
+//        for(double x : EXAMPLE.square)sum_square+=x;
+//        pi = (4.0 * sum_cirle) / sum_square*1.0;
+
         return pi;
+        // Final Estimated Value
     }
     public static void main(String[] args) {
+
         Socket socket = null;
         ServerSocket server = null;
         int port =5000;
@@ -43,13 +62,12 @@ public class Bai3Server {
             System.out.println("server starting...");
             String message ="";
             socket = server.accept();
-            Date date = new Date();
-            long timeStart = date.getTime();
             System.out.println("connecting...");
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             while (!message.equals("bye")){
                 message = in.readLine();
+                long start = System.currentTimeMillis();
                 String temp = "";
                 double n=0;
                 if(message.equals("bye"))break;
@@ -59,12 +77,10 @@ public class Bai3Server {
                         temp = "n phải lớn hơn 1.000.000";
                     }
                     else {
-                        long milisecond = new Date().getTime()-timeStart;
-                            String time = String.format("%02d phút, %02d giây",
-                                    TimeUnit.MILLISECONDS.toMinutes(milisecond),
-                                    TimeUnit.MILLISECONDS.toSeconds(milisecond) -
-                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milisecond)));
-                        temp="Số pi là : "+TinhPi(n)+". Thời gian tính hêt "+ time;
+                        double pi = TinhPi(n);
+                        long end = System.currentTimeMillis();
+                        long elapsedTime = end - start;
+                        temp="Số pi là : "+pi+". Thời gian tính hêt "+ (elapsedTime*0.001)+"s";
                     }
                 }
                 catch (NumberFormatException e){
